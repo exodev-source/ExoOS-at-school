@@ -1,10 +1,14 @@
 org 0x7c00 ; Offsetting to 31744 hexadecimal
 bits 16 ; setting bits to 16 (for the compiler)
 
-jmp main
+jmp detect_mem
 
 msg: db "Booting ExoOS..." ; Message to print to the screen
 endmsg:
+
+detect_mem:
+  clc ; clear carry flag
+  int
 
 main:
   mov bx, 0x000F ; set to page 0 and color 15 for white
