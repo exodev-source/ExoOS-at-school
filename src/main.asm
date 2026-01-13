@@ -1,23 +1,11 @@
 org 0x7c00 ; Offsetting to 31744 hexadecimal
 bits 16 ; setting bits to 16 (for the compiler)
 
-jmp detect_mem
+jmp main
 
 msg: db "Booting ExoOS..." ; Message to print to the screen
 endmsg:
 
-detect_mem:
-  clc ; clear carry flag
-  int 0x12 ; detect lower memory
-  jc .error ; checking for error
-  mov eax, ax ; mov ax to eax
-  xor ax, ax ; clear ax
-
-
-.error: 
-  cli
-  hlt
-  jmp .error
 
 main:
   mov bx, 0x000F ; set to page 0 and color 15 for white
@@ -57,7 +45,20 @@ skip:
   hlt
   jmp .done
 
+detect_mem:
+  clc ; clear carry flag
+  int 0x12 ; detect lower memory
+  jc .error ; checking for error
+  mov eax, ax ; mov ax to eax
+  xor ax, ax ; clear ax
+
+
+.error: 
+  cli
+  hlt
+  jmp .error
+
 jmp $
 
 times 510-($-$$) db 0 ; fill the empty space with 0
-dw 0xAA55 ; what the bios looks for to see if a disk is bootable
+dw 0xAA55 ; what the legacy bios looks for to see if a disk is bootable
