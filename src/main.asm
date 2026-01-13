@@ -8,7 +8,16 @@ endmsg:
 
 detect_mem:
   clc ; clear carry flag
-  int
+  int 0x12 ; detect lower memory
+  jc .error ; checking for error
+  mov eax, ax ; mov ax to eax
+  xor ax, ax ; clear ax
+
+
+.error: 
+  cli
+  hlt
+  jmp .error
 
 main:
   mov bx, 0x000F ; set to page 0 and color 15 for white
