@@ -41,15 +41,21 @@ skip:
   jmp .done
 
 .done:
-  cli
-  hlt
-  jmp .done
+  xor dx, dx ; All of this is just clearing
+  xor ax, ax
+  xor cx, cx
+  xor dx, dx
+  xor dh, dh
+  xor dl, dl
+  xor ds, ds
+  xor si, si
+  jmp detect_mem
 
 detect_mem:
   clc ; clear carry flag
-  int 0x12 ; detect lower memory
+  int 0x12 ; detect up to a MiB of memory (usually 640KiB)
   jc .error ; checking for error
-  mov eax, ax ; mov ax to eax
+  mov dx, ax ; mov ax to a different general purpose register
   xor ax, ax ; clear ax
 
 
