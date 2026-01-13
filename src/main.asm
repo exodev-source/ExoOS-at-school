@@ -3,7 +3,7 @@ bits 16 ; setting bits to 16 (for the compiler)
 
 jmp main
 
-msg: db "Booting ExoOS..." ; Message to print to the screen
+msg: db "Detecting memory..." ; Message to print to the screen
 endmsg:
 
 
@@ -57,12 +57,17 @@ detect_mem:
   jc .error ; checking for error
   mov dx, ax ; mov ax to a different general purpose register
   xor ax, ax ; clear ax
+  jmp .loop
 
-
-.error: 
+.error:
   cli
   hlt
   jmp .error
+
+.loop:
+  cli
+  hlt
+  jmp .loop
 
 jmp $
 
